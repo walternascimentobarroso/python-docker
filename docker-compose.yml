@@ -1,0 +1,19 @@
+version: '3'
+services:
+  web:
+    image: python:3.8
+    volumes:
+      - ./app:/app
+    working_dir: /app
+    command: bash -c "pip install -r requirements.txt && gunicorn -b 0.0.0.0:9000 app:app"
+    ports:
+      - "9000:9000"
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    links:
+      - web
